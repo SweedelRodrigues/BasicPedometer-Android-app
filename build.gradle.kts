@@ -1,17 +1,16 @@
-// Top-level build file
 buildscript {
     repositories {
         google()
         mavenCentral()
     }
     dependencies {
-        classpath("com.android.tools.build:gradle:8.8.1") // AGP version
+        classpath("com.android.tools.build:gradle:8.8.1") // AGP 8.8.1
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.0") // match your Kotlin version
     }
 }
 
-// Optional: For settings plugins using alias if using version catalog
 plugins {
-    alias(libs.plugins.kotlin.android) apply false
+    // if using alias from libs.versions.toml, make sure it points to the correct version
     alias(libs.plugins.android.application) apply false
+    alias(libs.plugins.kotlin.android) apply false
 }
