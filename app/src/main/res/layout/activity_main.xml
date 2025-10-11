@@ -1,36 +1,104 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:gravity="center"
-    android:padding="24dp"
-    android:background="#FAFAFA"
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:padding="24dp"
+    android:background="@color/material_dynamic_primary50">
 
+    <!-- Title -->
     <TextView
         android:id="@+id/title"
-        android:text="Basic Pedometer"
-        android:textSize="28sp"
-        android:textStyle="bold"
-        android:textColor="#E53935"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="40dp"/>
-
-    <TextView
-        android:id="@+id/tv_steps"
-        android:text="Steps: 0"
-        android:textSize="40sp"
+        android:text="StepTracker"
+        android:textColor="@android:color/black"
+        android:textSize="26sp"
         android:textStyle="bold"
-        android:textColor="#212121"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="30dp"/>
+        android:fontFamily="sans-serif-medium"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp" />
 
-    <Button
-        android:id="@+id/btn_reset"
-        android:text="Reset Steps"
-        android:backgroundTint="#E53935"
-        android:textColor="#FFFFFF"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-</LinearLayout>
+
+    <!-- Circular Steps Container -->
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/stepsCard"
+        android:layout_width="260dp"
+        android:layout_height="260dp"
+        android:layout_centerInParent="true"
+        app:cardCornerRadius="130dp"
+        app:cardElevation="8dp"
+        app:cardBackgroundColor="#FFFFFF"
+        android:gravity="center">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/tv_steps"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textSize="48sp"
+                android:textStyle="bold"
+                android:textColor="#E53935"
+                android:fontFamily="sans-serif-medium" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Steps Today"
+                android:textSize="18sp"
+                android:textColor="#757575"
+                android:fontFamily="sans-serif" />
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Buttons Section -->
+    <LinearLayout
+        android:id="@+id/buttonLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="40dp"
+        android:weightSum="2"
+        android:spacing="20dp">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_start"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Start"
+            android:textSize="18sp"
+            app:cornerRadius="20dp"
+            android:backgroundTint="#43A047"
+            android:textColor="@color/white"
+            app:icon="@android:drawable/ic_media_play"
+            app:iconTint="@android:color/white"
+            app:iconGravity="textStart"
+            app:iconPadding="8dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_reset"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Reset"
+            android:textSize="18sp"
+            app:cornerRadius="20dp"
+            android:backgroundTint="#E53935"
+            android:textColor="@android:color/white"
+            app:icon="@android:drawable/ic_menu_revert"
+            app:iconTint="@android:color/white"
+            app:iconGravity="textStart"
+            app:iconPadding="8dp" />
+    </LinearLayout>
+
+</RelativeLayout>
