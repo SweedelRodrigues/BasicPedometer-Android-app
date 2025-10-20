@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.basicpedometer"
+    namespace= "com.example.basicpedometer"
     compileSdk = 36
 
     defaultConfig {

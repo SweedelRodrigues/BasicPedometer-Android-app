@@ -1,5 +1,6 @@
 package com.example.basicpedometer
 
+
 import android.Manifest
 import android.content.Context
 import android.content.Intent
@@ -11,8 +12,8 @@ import android.hardware.SensorManager
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Button
 import android.widget.TextView
+import com.google.android.material.button.MaterialButton
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import java.text.SimpleDateFormat
@@ -30,7 +31,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
     private var previousSteps = 0f
     private var accelStepCount = 0
     private var previousMagnitude = 0.0
-    private val threshold = 6.0  // Adjust based on testing
+    private val threshold = 6.0  // Adjust this threshold for accelerometer-based step detection
 
     private lateinit var tvSteps: TextView
     private lateinit var btnReset: Button
@@ -40,6 +41,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        // Initialize views
         tvSteps = findViewById(R.id.tv_steps)
         btnReset = findViewById(R.id.btn_reset)
         btnHistory = findViewById(R.id.btn_history)
@@ -56,7 +58,9 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
                 ) != PackageManager.PERMISSION_GRANTED
             ) {
                 ActivityCompat.requestPermissions(
-                    this, arrayOf(Manifest.permission.ACTIVITY_RECOGNITION), 100
+                    this,
+                    arrayOf(Manifest.permission.ACTIVITY_RECOGNITION),
+                    100
                 )
             }
         }
@@ -67,7 +71,6 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             hasStepCounter = true
         } else {
             accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
-            hasStepCounter = false
         }
 
         // Reset button
@@ -89,11 +92,11 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
     override fun onResume() {
         super.onResume()
         if (hasStepCounter) {
-            stepCounterSensor?.also {
+            stepCounterSensor?.let {
                 sensorManager.registerListener(this, it, SensorManager.SENSOR_DELAY_UI)
             }
         } else {
-            accelerometerSensor?.also {
+            accelerometerSensor?.let {
                 sensorManager.registerListener(this, it, SensorManager.SENSOR_DELAY_NORMAL)
             }
         }
