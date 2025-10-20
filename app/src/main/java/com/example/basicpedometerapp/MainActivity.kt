@@ -1,6 +1,8 @@
 package com.example.basicpedometer
 
 import android.Manifest
+import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.hardware.Sensor
 import android.hardware.SensorEvent
@@ -13,6 +15,8 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import java.text.SimpleDateFormat
+import java.util.*
 import kotlin.math.sqrt
 
 class MainActivity : AppCompatActivity(), SensorEventListener {
@@ -24,13 +28,13 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
     private var hasStepCounter = false
     private var totalSteps = 0f
     private var previousSteps = 0f
-
     private var accelStepCount = 0
     private var previousMagnitude = 0.0
     private val threshold = 6.0  // Adjust based on testing
 
     private lateinit var tvSteps: TextView
     private lateinit var btnReset: Button
+    private lateinit var btnHistory: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,9 +42,14 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
 
         tvSteps = findViewById(R.id.tv_steps)
         btnReset = findViewById(R.id.btn_reset)
+        btnHistory = findViewById(R.id.btn_history)
+
         sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
 
-        // Permission for Android 10+
+        // Load previous step count
+        loadData()
+
+        // Ask permission for physical activity (Android 10+)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             if (ContextCompat.checkSelfPermission(
                     this, Manifest.permission.ACTIVITY_RECOGNITION
@@ -52,20 +61,28 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             }
         }
 
-        // Try to get Step Counter Sensor
+        // Detect available sensor
         stepCounterSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER)
         if (stepCounterSensor != null) {
             hasStepCounter = true
         } else {
-            // Fall back to Accelerometer
             accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
             hasStepCounter = false
         }
 
+        // Reset button
         btnReset.setOnClickListener {
+            saveHistory() // Save before resetting
             previousSteps = totalSteps
             accelStepCount = 0
             tvSteps.text = "Steps: 0"
+            saveData(0)
+        }
+
+        // View History button
+        btnHistory.setOnClickListener {
+            val intent = Intent(this, HistoryActivity::class.java)
+            startActivity(intent)
         }
     }
 
@@ -96,6 +113,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
                 totalSteps = event.values[0]
                 val currentSteps = totalSteps - previousSteps
                 tvSteps.text = "Steps: ${currentSteps.toInt()}"
+                saveData(currentSteps.toInt())
             }
 
             Sensor.TYPE_ACCELEROMETER -> {
@@ -110,10 +128,43 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
                 if (delta > threshold) {
                     accelStepCount++
                     tvSteps.text = "Steps: $accelStepCount"
+                    saveData(accelStepCount)
                 }
             }
         }
     }
 
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {}
+
+    private fun saveData(steps: Int) {
+        val sharedPref = getSharedPreferences("StepData", Context.MODE_PRIVATE)
+        val editor = sharedPref.edit()
+        editor.putInt("steps", steps)
+        editor.apply()
+    }
+
+    private fun loadData() {
+        val sharedPref = getSharedPreferences("StepData", Context.MODE_PRIVATE)
+        val savedSteps = sharedPref.getInt("steps", 0)
+        tvSteps.text = "Steps: $savedSteps"
+    }
+
+    private fun saveHistory() {
+        val sharedPref = getSharedPreferences("StepData", Context.MODE_PRIVATE)
+        val currentSteps = sharedPref.getInt("steps", 0)
+        val date = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(Date())
+
+        val history = sharedPref.getString("history", "") ?: ""
+        val newHistory = "$history\n$date - $currentSteps steps"
+        val editor = sharedPref.edit()
+        editor.putString("history", newHistory.trim())
+        editor.apply()
+    }
 }
+
+
+
+
+
+
+
