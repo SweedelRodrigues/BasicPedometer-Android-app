@@ -22,7 +22,9 @@ class HistoryActivity : AppCompatActivity() {
         val sharedPref = getSharedPreferences("StepData", Context.MODE_PRIVATE)
         val historyString = sharedPref.getString("history", "") ?: ""
 
-        val historyList = mutableListOf<Pair<String, Int>>()
+        // We'll now store (date, steps, totalSteps)
+        val historyList = mutableListOf<Triple<String, Int, Int>>()
+        val dailyTotals = mutableMapOf<String, Int>()
 
         if (historyString.isNotEmpty()) {
             val entries = historyString.trim().split("\n")
@@ -31,8 +33,15 @@ class HistoryActivity : AppCompatActivity() {
                 if (parts.size == 2) {
                     val date = parts[0]
                     val steps = parts[1].replace("steps", "").trim().toIntOrNull() ?: 0
-                    historyList.add(Pair(date, steps))
+
+                    // Add to total for that date
+                    dailyTotals[date] = (dailyTotals[date] ?: 0) + steps
                 }
+            }
+
+            // Now populate the list with date, steps, totalSteps
+            for ((date, totalSteps) in dailyTotals) {
+                historyList.add(Triple(date, totalSteps, totalSteps))
             }
         }
 
@@ -40,6 +49,4 @@ class HistoryActivity : AppCompatActivity() {
         recyclerView.adapter = historyAdapter
     }
 }
-
-
 

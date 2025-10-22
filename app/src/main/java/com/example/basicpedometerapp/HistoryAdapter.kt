@@ -6,25 +6,27 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class HistoryAdapter(private val historyList: List<Pair<String, Int>>) :
-    RecyclerView.Adapter<HistoryAdapter.HistoryViewHolder>() {
+class HistoryAdapter(private val historyList: List<Triple<String, Int, Int>>) :
+    RecyclerView.Adapter<HistoryAdapter.ViewHolder>() {
 
-    class HistoryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val tvDate: TextView = itemView.findViewById(R.id.tv_date)
-        val tvSteps: TextView = itemView.findViewById(R.id.tv_steps)
+    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val dateText: TextView = view.findViewById(R.id.tv_date)
+        val stepsText: TextView = view.findViewById(R.id.tv_steps)
+        val totalStepsText: TextView = view.findViewById(R.id.tv_total_steps)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HistoryViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_history, parent, false)
-        return HistoryViewHolder(view)
+        return ViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: HistoryViewHolder, position: Int) {
-        val (date, steps) = historyList[position]
-        holder.tvDate.text = date
-        holder.tvSteps.text = "Steps: $steps"
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val (date, steps, totalSteps) = historyList[position]
+        holder.dateText.text = date
+        holder.stepsText.text = "Steps: $steps"
+        holder.totalStepsText.text = "Total steps that day: $totalSteps"
     }
 
-    override fun getItemCount(): Int = historyList.size
+    override fun getItemCount() = historyList.size
 }
