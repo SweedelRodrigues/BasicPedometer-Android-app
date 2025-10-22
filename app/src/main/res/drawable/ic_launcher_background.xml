@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<<<<<<< HEAD
 <vector
     android:height="108dp"
     android:width="108dp"
@@ -72,3 +73,17 @@
     <path android:fillColor="#00000000" android:pathData="M79,19L79,89"
           android:strokeColor="#33FFFFFF" android:strokeWidth="0.8"/>
 </vector>
+=======
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+
+    <gradient
+        android:startColor="#FF5252"
+        android:centerColor="#FF8A65"
+        android:endColor="#FFC107"
+        android:angle="135"
+        android:type="linear" />
+
+    <corners android:radius="0dp" />
+</shape>
+>>>>>>> faae560a5880c45e91376a9ef6e25f4a7c3eb94c

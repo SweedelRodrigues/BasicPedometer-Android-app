@@ -5,10 +5,13 @@
 
     <application
         android:allowBackup="true"
+
         android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:icon="@mipmap/ic_launcher"
         android:theme="@style/Theme.BasicPedometerApp">
+
         <activity
             android:name="com.example.basicpedometer.HistoryActivity"
             android:exported="false" />
@@ -21,6 +24,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
     </application>
 
 </manifest>
